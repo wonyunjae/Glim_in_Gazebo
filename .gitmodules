@@ -13,3 +13,7 @@
 [submodule "gtsam_points"]
 	path = gtsam_points
 	url = https://github.com/koide3/gtsam_points
+[submodule "ros_gz"]
+	path = ros_gz
+	url = https://github.com/gazebosim/ros_gz.git
+	branch = humble
