@@ -1,0 +1,15 @@
+[submodule "gtsam"]
+	path = gtsam
+	url = https://github.com/borglab/gtsam
+[submodule "glim"]
+	path = glim
+	url = https://github.com/koide3/glim
+[submodule "glim_ros2"]
+	path = glim_ros2
+	url = https://github.com/koide3/glim_ros2
+[submodule "iridescence"]
+	path = iridescence
+	url = https://github.com/koide3/iridescence
+[submodule "gtsam_points"]
+	path = gtsam_points
+	url = https://github.com/koide3/gtsam_points
