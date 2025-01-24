@@ -53,7 +53,8 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=['/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
                    '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   '/imu@sensor_msgs/msg/Imu@gz.msgs.IMU'],
+                   '/lidar/points/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+                   'imu_data@sensor_msgs/msg/Imu@ignition.msgs.IMU'],
         output='screen'
     )
 
