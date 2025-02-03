@@ -35,7 +35,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(pkg_ros_gz_sim, 'launch', 'gz_sim.launch.py')),
         launch_arguments={
-            'gz_args': '-r tunnel.sdf'
+            'gz_args': '-r tunnel_glim.sdf'
         }.items(),
     )
 
@@ -54,7 +54,7 @@ def generate_launch_description():
         arguments=['/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
                    '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
                    '/lidar/points/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   'imu_data@sensor_msgs/msg/Imu@ignition.msgs.IMU'],
+                   'imu@sensor_msgs/msg/Imu@gz.msgs.IMU'],
         output='screen'
     )
 

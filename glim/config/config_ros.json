@@ -40,8 +40,8 @@
     "points_time_offset": 0.0,
     "acc_scale": 1.0,
     // TF config
-    "imu_frame_id": "vehicle/imu_link/imu_sensor",
-    "lidar_frame_id": "vehicle/lidar_link/lidar_sensor",
+    "imu_frame_id": "vehicle/base_link/imu_sensor",
+    "lidar_frame_id": "vehicle/base_link/lidar",
     "base_frame_id": "vehicle/base_link",
     "odom_frame_id": "odom",
     "map_frame_id": "map",
@@ -55,8 +55,8 @@
       // "libimu_validator.so"
     ],
     // Topicss
-    "imu_topic": "/imu_data",
-    "points_topic": "/lidar/points",
+    "imu_topic": "/imu",
+    "points_topic": "/lidar/points/points",
     "image_topic": "/image"
   }
 }
