@@ -47,6 +47,9 @@
     "map_frame_id": "map",
     "publish_imu2lidar": true,
     "tf_time_offset": 1e-6,
+    "use_per_point_timestamps": false,
+    "scan_period": 0.1,  // 현재 확인된 스캔 주기
+    "points_time_offset": 0.0,
     // Extension modules
     "extension_modules": [
       "libmemory_monitor.so",
@@ -56,7 +59,7 @@
     ],
     // Topicss
     "imu_topic": "/imu",
-    "points_topic": "/lidar/points/points",
+    "points_topic": "/lidar/points",
     "image_topic": "/image"
   }
 }

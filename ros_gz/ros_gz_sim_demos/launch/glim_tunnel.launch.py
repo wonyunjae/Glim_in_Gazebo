@@ -54,11 +54,39 @@ def generate_launch_description():
         arguments=['/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
                    '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
                    '/lidar/points/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   'imu@sensor_msgs/msg/Imu@gz.msgs.IMU'],
+                   'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
+                   '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+                   #TF 추가
+                   '/model/vehicle/pose@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
+                   '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+                   '/model/vehicle/imu_tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V'
+                   
+                   ],
+                    remappings=[
+            ('/model/vehicle/pose', '/tf'),
+            ('/model/vehicle/odometry', '/odom')
+        ],
         output='screen'
+    )
+    
+    imu_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='imu_tf_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', 'vehicle/base_link', 'vehicle/base_link/imu_sensor']
+    )
+    
+     # LiDAR TF publisher 추가
+    lidar_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='lidar_tf_publisher',
+        arguments=['0.55', '0', '0.45', '0', '0', '0', 'vehicle/base_link', 'vehicle/base_link/lidar']
     )
 
     return LaunchDescription([
         gz_sim,
-        bridge
+        bridge,
+        imu_tf,
+        lidar_tf
     ])
