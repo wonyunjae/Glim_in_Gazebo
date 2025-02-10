@@ -51,21 +51,31 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                   '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   '/lidar/points/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
-                   'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
-                   '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
-                   #TF 추가
-                   '/model/vehicle/pose@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
-                   '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-                   '/model/vehicle/imu_tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V'
-                   
-                   ],
-                    remappings=[
+        arguments=[
+            '/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
+            '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+            '/lidar/points/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+            'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
+            '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
+            '/model/vehicle/pose@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
+            '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
+            '/model/vehicle/imu_tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V'
+        ],
+        remappings=[
             ('/model/vehicle/pose', '/tf'),
             ('/model/vehicle/odometry', '/odom')
         ],
+        parameters=[{
+            'use_sim_time': True,
+            'qos_overrides./lidar/points.publisher.reliability': 'reliable',
+            'qos_overrides./lidar/points.publisher.durability': 'volatile',
+            'qos_overrides./lidar/points.publisher.history': 'keep_last',
+            'qos_overrides./lidar/points.publisher.depth': 5,
+            'qos_overrides.imu.publisher.reliability': 'reliable',
+            'qos_overrides.imu.publisher.durability': 'volatile',
+            'qos_overrides.imu.publisher.history': 'keep_last',
+            'qos_overrides.imu.publisher.depth': 5
+        }],
         output='screen'
     )
     

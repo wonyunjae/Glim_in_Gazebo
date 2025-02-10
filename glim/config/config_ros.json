@@ -35,9 +35,11 @@
     "enable_global_mapping": true,
     // Points config
     "keep_raw_points": false,
+    "use_per_point_timestamps": true,
+    "scan_period": -1.0,
+    "points_time_offset": 0.0,
     // IMU config
     "imu_time_offset": 0.0,
-    "points_time_offset": 0.0,
     "acc_scale": 1.0,
     // TF config
     "imu_frame_id": "vehicle/base_link/imu_sensor",
@@ -46,10 +48,7 @@
     "odom_frame_id": "odom",
     "map_frame_id": "map",
     "publish_imu2lidar": true,
-    "tf_time_offset": 1e-6,
-    "use_per_point_timestamps": false,
-    "scan_period": 0.1,  // 현재 확인된 스캔 주기
-    "points_time_offset": 0.0,
+    "tf_time_offset": 0.0,
     // Extension modules
     "extension_modules": [
       "libmemory_monitor.so",
@@ -57,8 +56,8 @@
       "librviz_viewer.so"
       // "libimu_validator.so"
     ],
-    // Topicss
-    "imu_topic": "/imu",
+    // Topics
+    "imu_topic": "/imu_filtered",
     "points_topic": "/lidar/points",
     "image_topic": "/image"
   }

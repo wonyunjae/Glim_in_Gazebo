@@ -42,20 +42,22 @@
   */
   "sensors": {
     // IMU config
-    "imu_acc_noise": 0.017,
-    "imu_gyro_noise": 0.0002,
-    "imu_int_noise": 0.0000075,
-    "imu_bias_noise": 0.0000008,
+    "imu_acc_noise": 0.001,
+    "imu_gyro_noise": 0.001,
+    "imu_acc_bias_noise": 0.001,
+    "imu_gyro_bias_noise": 0.001,
+    "imu_int_noise": 0.001,
+    "imu_bias_noise": 0.001,
     // LiDAR config
     "global_shutter_lidar": false,
     "T_lidar_imu": [
-    -0.55,   // x translation
-    0.0,    // y translation
-    -0.45,   // z translation
-    0.0,    // roll (radians)
-    0.0,    // pitch (radians)
-    0.0,    // yaw (radians)
-    1.0     // scale
+      0.55,    // x translation
+      0.0,     // y translation
+      0.45,    // z translation
+      0.0,     // qx
+      0.0,     // qy
+      0.0,     // qz
+      1.0      // qw
     ],
     // LiDAR per-point time settings
     "autoconf_perpoint_times": true,
@@ -90,6 +92,10 @@
       -0.0005798510962983399,
       0.00128686963241809,
       -0.03279627881588615
-    ]
+    ],
+    // 새로운 설정 추가
+    "adaptive_scan_period": true,
+    "min_scan_period": 0.1,
+    "max_scan_period": 0.2
   }
 }

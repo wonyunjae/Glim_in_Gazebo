@@ -51,9 +51,18 @@ def generate_launch_description():
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=['lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan',
-                   '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked'],
-        output='screen'
+        parameters=[{
+            'use_sim_time': True,
+            'qos_overrides./lidar/points.publisher.reliability': 'reliable',
+            'qos_overrides./lidar/points.publisher.durability': 'volatile',
+            'qos_overrides./lidar/points.publisher.history': 'keep_last',
+            'qos_overrides./lidar/points.publisher.depth': 10,
+            
+            # 타임스탬프 필드 설정
+            'enable_point_time_field': True,
+            'point_time_field_name': 'time',
+            'point_time_field_offset': 16  # xyz(12) + intensity(4) 다음에 time 필드
+        }]
     )
 
     return LaunchDescription([
