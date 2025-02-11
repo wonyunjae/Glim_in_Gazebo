@@ -31,6 +31,7 @@
     "vgicp_voxelmap_scaling_factor": 2.0,
     // Optimizer params
     "save_imu_rate_trajectory": true,
-    "num_threads": 2
+    "num_threads": 2,
+    "registration_error_factor_type": "VGICP"
   }
 }
