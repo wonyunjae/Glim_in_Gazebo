@@ -1193,6 +1193,7 @@
               <topic>camera</topic>
             </sensor>
             <sensor name="lidar" type="gpu_lidar">
+              <pose>0.55 0 0.45 0 0 0</pose>
               <always_on>1</always_on>
               <update_rate>10</update_rate>  
               <visualize>true</visualize>
@@ -1230,7 +1231,7 @@
               </ray>
             </sensor>
             <sensor name="imu_sensor" type="imu">
-                <pose>0 0 0 0 0 0</pose>
+                <pose>0 0 0.3 0 0 0</pose>
                 <always_on>1</always_on>
                 <update_rate>100</update_rate>
                 <visualize>true</visualize>

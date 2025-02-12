@@ -56,9 +56,9 @@ def generate_launch_description():
             'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
             '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
             '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-            '/model/vehicle/tf/@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
-            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
-            
+            '/model/vehicle/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
+            '/clock@rosgraph_msgs/msg/Clockgz.msgs.Clock',
+            '/tf_static@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
         ],
         remappings=[
             ('/model/vehicle/odometry', '/odom'),
@@ -68,15 +68,45 @@ def generate_launch_description():
             'use_sim_time': True,
             'qos_overrides./lidar/points.publisher.reliability': 'reliable',
             'qos_overrides.imu.publisher.reliability': 'reliable',
-
+            'qos_overrides./tf.publisher.reliability': 'reliable',
+            'qos_overrides./tf.publisher.durability': 'transient_local',
+            'qos_overrides./tf_static.publisher.reliability': 'reliable',
+            'qos_overrides./tf_static.publisher.durability': 'transient_local',
         }],
         output='screen'
     )
     
+    # Static TF publisher
+    static_tf_pub = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='base_to_sensors_tf',
+        output='screen',
+        arguments=[
+            '--frame-id', 'vehicle/base_link',
+            '--child-frame-id', 'vehicle/base_link/imu_sensor',
+            '--x', '-0.002225', '--y', '-0.033355', '--z', '0.277208',
+            '--qx', '0', '--qy', '0', '--qz', '0', '--qw', '1',
+        ]
+    )
 
+    static_tf_pub_lidar = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='base_to_lidar_tf',
+        output='screen',
+        arguments=[
+            # base_link -> lidar (상대 변환)
+            '--frame-id', 'vehicle/base_link',
+            '--child-frame-id', 'vehicle/base_link/lidar',
+            '--x', '0.547775', '--y', '-0.033355', '--z', '0.427208',
+            '--qx', '0', '--qy', '0', '--qz', '0', '--qw', '1',
+        ]
+    )
 
     return LaunchDescription([
         gz_sim,
         bridge,
-
+        static_tf_pub,
+        static_tf_pub_lidar
     ])
