@@ -36,7 +36,7 @@
     // Points config
     "keep_raw_points": false,
     "use_per_point_timestamps": true,
-    "scan_period": -1.0,
+    "scan_period": 0.1,
     "points_time_offset": 0.0,
     // IMU config
     "imu_time_offset": 0.0,

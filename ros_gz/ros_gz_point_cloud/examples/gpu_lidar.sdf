@@ -274,6 +274,9 @@
               <max>10.0</max>
               <resolution>0.01</resolution>
             </range>
+            <ray>
+              <time_stamp_fields>true</time_stamp_fields>
+            </ray>
           </lidar>
           <alwaysOn>1</alwaysOn>
           <visualize>true</visualize>
@@ -283,6 +286,7 @@
             <namespace>custom_params</namespace>
             <topic>pc2</topic>
             <frame_id>custom_params/link</frame_id>
+            <point_time_field>true</point_time_field>
           </plugin>
         </sensor>
       </link>

@@ -1195,21 +1195,19 @@
             <sensor name="lidar" type="gpu_lidar">
               <pose>0.55 0 0.45 0 0 0</pose>
               <always_on>1</always_on>
-              <update_rate>10</update_rate>  
+              <update_rate>10</update_rate>
               <visualize>true</visualize>
               <topic>lidar</topic>
-              
               <enable_metrics>true</enable_metrics>
               <ignition_frame_id>vehicle/base_link/lidar</ignition_frame_id>
-              <timestamped_points>true</timestamped_points>
               
               <ray>
                 <scan>
                   <horizontal>
                     <samples>900</samples>
                     <resolution>1</resolution>
-                    <min_angle>-3.141592654</min_angle>
-                    <max_angle>3.141592654</max_angle>
+                    <min_angle>-3.14159</min_angle>
+                    <max_angle>3.14159</max_angle>
                   </horizontal>
                   <vertical>
                     <samples>16</samples>
@@ -1228,7 +1226,23 @@
                   <mean>0.0</mean>
                   <stddev>0.01</stddev>
                 </noise>
+                <time_stamp_fields>true</time_stamp_fields>
+                <output_type>point_cloud</output_type>
+                <point_cloud_fields>
+                    <field>
+                        <name>time</name>
+                        <offset>28</offset>  <!-- after x(0), y(4), z(8), intensity(16), ring(24) -->
+                        <datatype>FLOAT64</datatype>
+                        <count>1</count>
+                    </field>
+                </point_cloud_fields>
               </ray>
+              <plugin filename="RosGzPointCloud" name="ros_gz_point_cloud::PointCloud">
+                <point_time_field>true</point_time_field>
+                <point_time_field_offset>28</point_time_field_offset>
+                <point_time_field_name>time</point_time_field_name>
+                <scan_time>0.1</scan_time>
+              </plugin>
             </sensor>
             <sensor name="imu_sensor" type="imu">
                 <pose>0 0 0.3 0 0 0</pose>
@@ -1244,7 +1258,7 @@
                         <x><noise type="gaussian">
                             <mean>0.0</mean>
                             <stddev>0.001</stddev>
-                            <bias_mean>0.0</bias_mean>
+                            <bias_mean>0.0</bias_mean>ㄴ
                             <bias_stddev>0.0001</bias_stddev>
                         </noise></x>
                         <y><noise type="gaussian">

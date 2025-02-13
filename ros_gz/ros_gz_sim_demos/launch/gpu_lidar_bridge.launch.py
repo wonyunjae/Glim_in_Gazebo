@@ -61,7 +61,7 @@ def generate_launch_description():
             # 타임스탬프 필드 설정
             'enable_point_time_field': True,
             'point_time_field_name': 'time',
-            'point_time_field_offset': 16  # xyz(12) + intensity(4) 다음에 time 필드
+            'point_time_field_offset': 28,  # xyz(12) + rgb(12) + padding(4)
         }]
     )
 

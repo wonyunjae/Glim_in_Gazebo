@@ -53,6 +53,7 @@ def generate_launch_description():
         executable='parameter_bridge',
         arguments=[
             '/lidar/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloudPacked',
+            '/lidar@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan[ignition.msgs.LaserScan',
             'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
             '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
             '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
@@ -67,11 +68,19 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': True,
             'qos_overrides./lidar/points.publisher.reliability': 'reliable',
+            'qos_overrides./lidar/points.publisher.durability': 'volatile',
+            'qos_overrides./lidar/points.publisher.history': 'keep_last',
+            'qos_overrides./lidar/points.publisher.depth': 10,
             'qos_overrides.imu.publisher.reliability': 'reliable',
             'qos_overrides./tf.publisher.reliability': 'reliable',
             'qos_overrides./tf.publisher.durability': 'transient_local',
             'qos_overrides./tf_static.publisher.reliability': 'reliable',
             'qos_overrides./tf_static.publisher.durability': 'transient_local',
+            'point_time_field': True,
+            'point_time_field_name': 'time',
+            'point_time_field_offset': 28,
+            'point_time_base': 0.0,
+            'point_time_scan_period': 0.1,
         }],
         output='screen'
     )

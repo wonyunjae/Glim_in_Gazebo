@@ -70,6 +70,27 @@ public:
 
 private:
     std::unique_ptr < PointCloudPrivate > dataPtr;
+    bool enable_point_time_field_;
+    std::string point_time_field_name_;
+    size_t point_time_field_offset_;
+  };
+
+  // Add PointCloudPrivate class definition
+  class PointCloudPrivate {
+  public:
+    // Existing variables...
+    
+    /// \brief Enable point time field
+    bool enable_point_time_field_;
+    
+    /// \brief Base time for point time calculation
+    std::chrono::steady_clock::duration base_time_;
+    
+    /// \brief Scan time for point time calculation
+    std::chrono::steady_clock::duration scan_time_;
+    
+    /// \brief Point time field name
+    std::string point_time_field_name_;
   };
 }
 

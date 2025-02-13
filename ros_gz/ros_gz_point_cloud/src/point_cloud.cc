@@ -169,6 +169,26 @@ public:
 
 public:
   SensorType type_;
+
+  /// \brief Enable point time field
+ㄴ
+public:
+  bool enable_point_time_field_;
+
+  /// \brief Base time for point time calculation
+
+public:
+  std::chrono::steady_clock::duration base_time_;
+
+  /// \brief Scan time for point time calculation
+
+public:
+  std::chrono::steady_clock::duration scan_time_;
+
+  /// \brief Point time field name
+
+public:
+  std::string point_time_field_name_;
 };
 
 //////////////////////////////////////////////////
@@ -225,6 +245,14 @@ void PointCloud::Configure(
   // Rendering engine and scene
   this->dataPtr->engine_name_ = _sdf->Get < std::string > ("engine", "ogre2").first;
   this->dataPtr->scene_name_ = _sdf->Get < std::string > ("scene", "scene").first;
+
+  // Point time field
+  this->dataPtr->enable_point_time_field_ = _sdf->Get<bool>("point_time_field", false).first;
+  this->dataPtr->base_time_ = gz::math::durationFromSec(
+    _sdf->Get<double>("base_time", 0.0).first);
+  this->dataPtr->scan_time_ = gz::math::durationFromSec(
+    _sdf->Get<double>("scan_time", 0.0).first);
+  this->dataPtr->point_time_field_name_ = _sdf->Get<std::string>("point_time_field_name", "time").first;
 }
 
 //////////////////////////////////////////////////
@@ -407,15 +435,22 @@ void PointCloudPrivate::OnNewDepthFrame(
   msg.is_dense = true;
 
   sensor_msgs::PointCloud2Modifier modifier(msg);
-  modifier.setPointCloud2FieldsByString(2, "xyz", "rgb");
+  modifier.setPointCloud2Fields(msg, 6,
+      "x",         1, sensor_msgs::msg::PointField::FLOAT32,  // offset: 0
+      "y",         1, sensor_msgs::msg::PointField::FLOAT32,  // offset: 4
+      "z",         1, sensor_msgs::msg::PointField::FLOAT32,  // offset: 8
+      "intensity", 1, sensor_msgs::msg::PointField::FLOAT32,  // offset: 16
+      "ring",      1, sensor_msgs::msg::PointField::UINT16,   // offset: 24
+      "time",      1, sensor_msgs::msg::PointField::FLOAT64   // offset: 28
+  );
   modifier.resize(_width * _height);
 
   sensor_msgs::PointCloud2Iterator < float > iter_x(msg, "x");
   sensor_msgs::PointCloud2Iterator < float > iter_y(msg, "y");
   sensor_msgs::PointCloud2Iterator < float > iter_z(msg, "z");
-  sensor_msgs::PointCloud2Iterator < uint8_t > iter_r(msg, "r");
-  sensor_msgs::PointCloud2Iterator < uint8_t > iter_g(msg, "g");
-  sensor_msgs::PointCloud2Iterator < uint8_t > iter_b(msg, "b");
+  sensor_msgs::PointCloud2Iterator < float > iter_intensity(msg, "intensity");
+  sensor_msgs::PointCloud2Iterator < uint16_t > iter_ring(msg, "ring");
+  sensor_msgs::PointCloud2Iterator < double > iter_time(msg, "time");
 
   if (this->rgb_camera_) {
     this->rgb_camera_->Capture(this->rgb_image_);
@@ -464,7 +499,7 @@ void PointCloudPrivate::OnNewDepthFrame(
       azimuth = this->gpu_rays_->AngleMin().Radian();
     }
     for (uint32_t i = 0; i < _width;
-      ++i, ++iter_x, ++iter_y, ++iter_z, ++iter_r, ++iter_g, ++iter_b)
+      ++i, ++iter_x, ++iter_y, ++iter_z, ++iter_intensity, ++iter_ring, ++iter_time)
     {
       // Index of current point
       auto index = j * _width * _channels + i * _channels;
@@ -504,23 +539,33 @@ void PointCloudPrivate::OnNewDepthFrame(
       // Put image color data for each point
       if (this->rgb_image_msg_.data.size() == _height * _width * 3) {
         // color
-        *iter_r = image_src[i * 3 + j * _width * 3 + 0];
-        *iter_g = image_src[i * 3 + j * _width * 3 + 1];
-        *iter_b = image_src[i * 3 + j * _width * 3 + 2];
+        *iter_intensity = 255;
+        *iter_ring = 0;
       } else if (this->rgb_image_msg_.data.size() == _height * _width) {
         // mono?
-        *iter_r = image_src[i + j * _width];
-        *iter_g = image_src[i + j * _width];
-        *iter_b = image_src[i + j * _width];
+        *iter_intensity = 255;
+        *iter_ring = 0;
       } else {
         // no image
-        *iter_r = 0;
-        *iter_g = 0;
-        *iter_b = 0;
+        *iter_intensity = 0;
+        *iter_ring = 0;
       }
       azimuth += angle_step;
     }
     inclination += vertical_angle_step;
+  }
+
+  // Add time field
+  if (this->enable_point_time_field_) {
+    sensor_msgs::PointCloud2Iterator<double> iter_time(msg, this->point_time_field_name_);
+    for (uint32_t j = 0; j < _height; ++j) {
+        for (uint32_t i = 0; i < _width; ++i, ++iter_time) {
+            // Calculate time for each point based on scan angle
+            double point_time = this->base_time_ + 
+                (j * _width + i) * this->scan_time_;
+            *iter_time = point_time;
+        }
+    }
   }
 
   this->pc_pub_.publish(msg);
