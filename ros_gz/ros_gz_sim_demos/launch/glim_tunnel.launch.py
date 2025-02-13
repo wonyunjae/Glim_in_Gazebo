@@ -56,13 +56,13 @@ def generate_launch_description():
             'imu@sensor_msgs/msg/Imu@gz.msgs.IMU',
             '/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist',
             '/model/vehicle/odometry@nav_msgs/msg/Odometry@gz.msgs.Odometry',
-            '/model/vehicle/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
+            # '/model/vehicle/tf@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
             '/clock@rosgraph_msgs/msg/Clockgz.msgs.Clock',
             '/tf_static@tf2_msgs/msg/TFMessage@gz.msgs.Pose_V',
         ],
         remappings=[
             ('/model/vehicle/odometry', '/odom'),
-            ('/model/vehicle/tf', '/tf'),
+            # ('/model/vehicle/tf', '/tf'),
         ],
         parameters=[{
             'use_sim_time': True,
@@ -82,6 +82,9 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='base_to_sensors_tf',
         output='screen',
+        # remappings=[
+        #     ('/tf_static', '/tf'),
+        # ],
         arguments=[
             '--frame-id', 'vehicle/base_link',
             '--child-frame-id', 'vehicle/base_link/imu_sensor',
