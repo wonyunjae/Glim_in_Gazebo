@@ -31,25 +31,29 @@
   // image_topic            : Image topic (required for only extension modules)
   "glim_ros": {
     // Backend modules
-    "enable_local_mapping": false,
+    "enable_local_mapping": true,
     "enable_global_mapping": true,
     // Points config
     "keep_raw_points": false,
     "use_per_point_timestamps": true,
-    "scan_period": 0.1,
+    "scan_period": 0.2,
     "points_time_offset": 0.0,
     // IMU config
     "imu_time_offset": 0.0,
     "acc_scale": 1.0,
     // TF config
-    "imu_frame_id": "vehicle/base_link/imu_sensor",
-    "lidar_frame_id": "vehicle/base_link/lidar",
-    "base_frame_id": "",
-    "odom_frame_id": "vehicle/odom",
-    // "imu_frame_id": "imu",
-    // "lidar_frame_id": "lidar",
+
+    //gazebo frame id
+    // "imu_frame_id": "vehicle/base_link/imu_sensor",
+    // "lidar_frame_id": "vehicle/base_link/lidar",
     // "base_frame_id": "",
-    // "odom_frame_id": "odom",
+    // "odom_frame_id": "vehicle/odom",
+
+    // ros2 frame id [Mini RAPID]
+    "imu_frame_id": "imu_link",
+    "lidar_frame_id": "velodyne",
+    "base_frame_id": "",
+    "odom_frame_id": "odom",
     "map_frame_id": "map",
     "publish_imu2lidar": true,
     "tf_time_offset": 0.0,
@@ -60,9 +64,14 @@
       "librviz_viewer.so"
       // "libimu_validator.so"
     ],
-    // Topics
-    "imu_topic": "/imu_filtered",
-    "points_topic": "/lidar/points",
+    // Gazebo Topics
+    // "imu_topic": "/imu_filtered",
+    // "points_topic": "/lidar/points",
+    // "image_topic": "/image"
+
+    // ROS2 Topics (Mini RAPID)
+    "imu_topic": "/imu_xsens",
+    "points_topic": "/velodyne_points",
     "image_topic": "/image"
   }
 }
